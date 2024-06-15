@@ -3,4 +3,4 @@ yolov8x.pt
 training/football-players-detection-1
 training/yolov5lu.pt
 models
-output_videos
+output_videos/output_video.avi
