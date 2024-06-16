@@ -122,6 +122,7 @@ class Tracker:
         x_center, _ = get_center_of_bbox(bbox)
         width = get_bbox_width(bbox)
 
+        # drawing the ellipse for the player 
         cv2.ellipse(
             frame,
             center=(x_center,y2),
@@ -134,6 +135,7 @@ class Tracker:
             lineType=cv2.LINE_4
         )
 
+        # drawing the rectangle for the player 
         rectangle_width = 40
         rectangle_height=20
         x1_rect = x_center - rectangle_width//2
@@ -141,6 +143,7 @@ class Tracker:
         y1_rect = (y2- rectangle_height//2) +15
         y2_rect = (y2+ rectangle_height//2) +15
 
+        
         if track_id is not None:
             cv2.rectangle(frame,
                           (int(x1_rect),int(y1_rect) ),
@@ -166,7 +169,7 @@ class Tracker:
     
 
     # function for having triangles
-    
+
 
 
     # *function for having circles
@@ -185,7 +188,7 @@ class Tracker:
                 # calling
                 frame = self.draw_ellipse(frame, player["bbox"],color, track_id)
 
-                if player.get('has_ball',False):
+                '''if player.get('has_ball',False):
                     frame = self.draw_traingle(frame, player["bbox"],(0,0,255))
 
             # Draw Referee
@@ -198,7 +201,7 @@ class Tracker:
 
 
             # Draw Team Ball Control
-            frame = self.draw_team_ball_control(frame, frame_num, team_ball_control)
+            frame = self.draw_team_ball_control(frame, frame_num, team_ball_control)'''
 
             output_video_frames.append(frame)
 
