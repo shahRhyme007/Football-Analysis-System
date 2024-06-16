@@ -6,6 +6,8 @@ import sys
 sys.path.append('../')
 from utils import get_center_of_bbox, get_bbox_width, get_foot_position
 import cv2
+import numpy as np
+import pandas as pd
 
 
 
@@ -135,7 +137,7 @@ class Tracker:
             lineType=cv2.LINE_4
         )
 
-        # drawing the rectangle for the player 
+        # drawing the rectangle for the player (for numbers)
         rectangle_width = 40
         rectangle_height=20
         x1_rect = x_center - rectangle_width//2
@@ -168,7 +170,22 @@ class Tracker:
         return frame
     
 
-    # function for having triangles
+    # function for having triangles on the ball
+    def draw_traingle(self,frame,bbox,color):
+        y= int(bbox[1])
+        x,_ = get_center_of_bbox(bbox)
+
+        triangle_points = np.array([
+            [x,y],
+            [x-10,y-20],
+            [x+10,y-20],
+        ])
+        cv2.drawContours(frame, [triangle_points],0,color, cv2.FILLED)
+        cv2.drawContours(frame, [triangle_points],0,(0,0,0), 2)
+
+        return frame
+
+    # function for tracking the ball along with the triangle(for each seperate team)
 
 
 
@@ -182,26 +199,25 @@ class Tracker:
             ball_dict = tracks["ball"][frame_num]
             referee_dict = tracks["referees"][frame_num]
 
-            # Draw Players
+            # Draw Players--> they will have a red circle below them
             for track_id, player in player_dict.items():
                 color = player.get("team_color",(0,0,255))
                 # calling
                 frame = self.draw_ellipse(frame, player["bbox"],color, track_id)
 
-                '''if player.get('has_ball',False):
+                if player.get('has_ball',False):
                     frame = self.draw_traingle(frame, player["bbox"],(0,0,255))
 
-            # Draw Referee
+            # Draw Referee--> they will have a yellow circle below them
             for _, referee in referee_dict.items():
                 frame = self.draw_ellipse(frame, referee["bbox"],(0,255,255))
             
-            # Draw ball 
+            # # Draw ball 
             for track_id, ball in ball_dict.items():
                 frame = self.draw_traingle(frame, ball["bbox"],(0,255,0))
 
 
-            # Draw Team Ball Control
-            frame = self.draw_team_ball_control(frame, frame_num, team_ball_control)'''
+        
 
             output_video_frames.append(frame)
 
